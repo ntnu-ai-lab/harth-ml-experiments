@@ -27,8 +27,6 @@ The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main
 | 8    | lying                     | 			                    |
 | 13   | cycling (sit)             | 			                    |
 | 14   | cycling (stand)           | 			                    |
-| 130  | cycling (sit, inactive)   |like cycling (sit) but no leg movement  |
-| 140  | cycling (stand, inactive) |like cycling (stand) but no leg movement|
 | 18   | transport (sit)  	   |e.g., in a car 			    |
 | 19   | transport (stand)	   |e.g., in a bus or train 		    |
 
