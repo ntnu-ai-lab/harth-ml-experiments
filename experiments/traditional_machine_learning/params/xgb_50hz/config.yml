@@ -1,0 +1,117 @@
+# Predict command
+COMMAND: [ python, predict.py ]
+# Train command
+TRAIN_COMMAND: [ python, train.py ]
+LOO_CV_COMMAND: [python, loo_cross_validate.py]
+# Sample rate the model is intended for 
+FREQUENCY: 50
+# Debug option
+DEBUG: False
+# Classes used in model
+CLASSES:
+  - { label: 1,  name: 'walking',                             }
+  - { label: 2,  name: 'running',                             }
+  - { label: 3,  name: 'shuffling',                           }
+  - { label: 4,  name: 'stairs (ascending)',                  }
+  - { label: 5,  name: 'stairs (descending)',                 }
+  - { label: 6,  name: 'standing',                            }
+  - { label: 7,  name: 'sitting',                             }
+  - { label: 8,  name: 'lying',                               }
+  - { label: 13, name: 'cycling (sit)',                       }
+  - { label: 14, name: 'cycling (stand)',                     }
+  - { label: 18, name: 'transport',                           }
+  - { label: 19, name: 'commute',                             }
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+# --- Information about data
+# Path to training dataset 
+TRAIN_DATA: Path/to/harth_dataset
+
+# Defining the subjects of each recording session
+SUBJECT_GROUPS:
+    GROUP1_SUBJECTS: [S006.csv, S012.csv, S014.csv, S018.csv,
+                      S020.csv, S022.csv, S008.csv, S010.csv,
+                      S013.csv, S015.csv, S017.csv, S019.csv,
+                      S016.csv, S009.csv, S021.csv]
+    GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
+                      S027.csv, S028.csv, S029.csv]
+
+SENSORS:
+  full:
+    columns: [back_x, back_y, back_z, thigh_x, thigh_y, thigh_z]
+LABEL_COLUMN: label
+# Sequence length for prediction windows
+SEQUENCE_LENGTH: 50
+OVERLAP: 0.0
+# Features used
+
+FEATURES:
+  # Time domain
+  - mean_gravity
+  - cv_gravity
+  - std_gravity
+  - q0_gravity
+  - q25_gravity
+  - q50_gravity
+  - q75_gravity
+  - q100_gravity
+  - skew
+  - kurtosis
+  - energy
+  - axes_corr
+  - axes_mean
+  # Frequency domain
+  - freq_mean
+  - freq_dom
+  - freq_dom_mag
+  - freq_total_signal_power
+  - freq_std
+  - freq_cent
+
+# -- Model 
+# Which classifier to use 
+ALGORITHM: xgboost
+# Arguments for classifier to perform a GridSearch
+# ALGORITHM_ARGS:
+#   eta: [0.1,0.3,0.5]
+#   max_depth: [3,5,10,20,25]
+#   n_estimators: [20,50,100,256,512,1024]
+#   reg_lambda: 1
+#   reg_alpha: 0
+#   gamma: 0
+#   nthread: 20
+#   objective: multi:softprob
+#   eval_metric: merror
+
+# Best args
+ALGORITHM_ARGS:
+  eta: [0.1]
+  max_depth: [3]
+  n_estimators: [1024]
+  reg_lambda: 1
+  reg_alpha: 0
+  gamma: 0
+  nthread: 20
+  objective: multi:softprob
+  eval_metric: merror
+
+# Whether to use scaling before training
+#SCALE_DATA: standardize
+#SCALE_DATA: minmax
+SCALE_DATA: null
+
+
+# -- Cross Validation 
+GS_NUM_TEST: 4 # How many subjects to use for testing
+CV_RANDOM: 124 # Seed for xvalidation splits
+CV_METRIC: f1score
+
+SKIP_FINISHED_ARGS: True
+# Whether to train on the full harth dataset after LOSO
+TRAIN_ON_FULL_DATASET: True
+
+# --- Inference params
+INFERENCE_BATCH_SIZE: 1024
+# PREDICTION_MODEL: path/to/trained_model.pkl
+PREDICTION_MODEL: null

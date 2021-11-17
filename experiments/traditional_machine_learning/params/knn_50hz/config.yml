@@ -1,0 +1,104 @@
+# Predict command
+COMMAND: [ python, predict.py ]
+# Train command
+TRAIN_COMMAND: [ python, train.py ]
+LOO_CV_COMMAND: [python, loo_cross_validate.py]
+# Sample rate the model is intended for 
+FREQUENCY: 50
+# Debug option
+DEBUG: False
+# Classes used in model
+CLASSES:
+  - { label: 1,  name: 'walking',                             }
+  - { label: 2,  name: 'running',                             }
+  - { label: 3,  name: 'shuffling',                           }
+  - { label: 4,  name: 'stairs (ascending)',                  }
+  - { label: 5,  name: 'stairs (descending)',                 }
+  - { label: 6,  name: 'standing',                            }
+  - { label: 7,  name: 'sitting',                             }
+  - { label: 8,  name: 'lying',                               }
+  - { label: 13, name: 'cycling (sit)',                       }
+  - { label: 14, name: 'cycling (stand)',                     }
+  - { label: 18, name: 'transport',                           }
+  - { label: 19, name: 'commute',                             }
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+# --- Information about data
+# Path to training dataset 
+TRAIN_DATA: Path/to/harth_dataset
+
+# Defining the subjects of each recording session
+SUBJECT_GROUPS:
+    GROUP1_SUBJECTS: [S006.csv, S012.csv, S014.csv, S018.csv,
+                      S020.csv, S022.csv, S008.csv, S010.csv,
+                      S013.csv, S015.csv, S017.csv, S019.csv,
+                      S016.csv, S009.csv, S021.csv]
+    GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
+                      S027.csv, S028.csv, S029.csv]
+
+SENSORS:
+  full:
+    columns: [back_x, back_y, back_z, thigh_x, thigh_y, thigh_z]
+LABEL_COLUMN: label
+# Sequence length for prediction windows
+SEQUENCE_LENGTH: 50
+OVERLAP: 0.0
+# Features used
+
+FEATURES:
+  # Time domain
+  - mean_gravity
+  - cv_gravity
+  - std_gravity
+  - q0_gravity
+  - q25_gravity
+  - q50_gravity
+  - q75_gravity
+  - q100_gravity
+  - skew
+  - kurtosis
+  - energy
+  - axes_corr
+  - axes_mean
+  # Frequency domain
+  - freq_mean
+  - freq_dom
+  - freq_dom_mag
+  - freq_total_signal_power
+  - freq_std
+  - freq_cent
+
+# Whether to use scaling before training
+#SCALE_DATA: standardize
+#SCALE_DATA: minmax
+SCALE_DATA: null
+
+# Which classifier to use 
+ALGORITHM: knn
+# Arguments for classifier (GS and CV)
+# ALGORITHM_ARGS:
+#     n_neighbors: [1,2,3,4,5,6,7,8,9,10,11,12,20,30]
+#     weights: ["uniform", "distance"]
+#     n_jobs: 1
+
+#Best arguments:
+# ALGORITHM_ARGS:
+     n_neighbors: [11]
+     weights: [distance"]
+     n_jobs: 1
+
+# If Arguments already trained in Grid Search, skip them
+SKIP_FINISHED_ARGS: True
+TRAIN_ON_FULL_DATASET: False
+
+
+# -- Cross Validation 
+GS_NUM_TEST: 4
+CV_RANDOM: 124
+CV_METRIC: f1score
+
+# --- Inference params
+INFERENCE_BATCH_SIZE: 1024
+# PREDICTION_MODEL: path/to/trained_model.pkl
+PREDICTION_MODEL: null
