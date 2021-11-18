@@ -32,7 +32,7 @@ The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main
 ## Machine Learning Experiments
 The folder [experiments](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments) contains all our experiments. It is possible to train a K-Nearest Neighbors, a Support Vector Machine, a Random Forest, an Extreme Gradient Boost, a Convolutional Neural Network, a Bidirectional Long Short-term Memory, and a CNN with multi-resolution blocks.
 ### Requirements
-- Python 3.9.7+
+- Python 3.8.10+
 ```bash
 cd experiments
 pip install -r requirements.txt
