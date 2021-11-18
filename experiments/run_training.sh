@@ -6,7 +6,7 @@ function usage() {
     Usage: $0 [-a approach] [-d dataset_path]
 
     Options:
-	-a, --approach:      Which approach to use (xgb,rf,svm,knn)
+	-a, --approach:      Which approach to use (xgb,rf,svm,knn,cnn,lstm,mr_cnn)
         -d, --dataset_path:  Path of the HARTH dataset
 USAGE
     exit 1
@@ -53,9 +53,18 @@ elif [ "$model" == "rf" ]; then
 elif [ "$model" == "knn" ]; then
     approach_path=traditional_machine_learning
     config_path=$approach_path/params/knn_50hz/
+elif [ "$model" == "cnn" ]; then
+    approach_path=deep_learning
+    config_path=$approach_path/params/cnn_50hz/
+elif [ "$model" == "lstm" ]; then
+    approach_path=deep_learning
+    config_path=$approach_path/params/lstm_50hz/
+elif [ "$model" == "mr_cnn" ]; then
+    approach_path=deep_learning
+    config_path=$approach_path/params/inc_cnn_50hz/
 else
     echo "Error: Unknown model $model." 
-    echo "Allowed models: xgb, svm, rf, knn"
+    echo "Allowed models: xgb, svm, rf, knn, cnn, lstm, mr_cnn"
 fi
 
 echo "Start training "$model...

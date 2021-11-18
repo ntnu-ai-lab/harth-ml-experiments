@@ -9,24 +9,6 @@ import pandas as pd
 import sklearn.model_selection
 
 
-# def sample(x, y, sequence_length, rate=1.0, perturb=False):
-#     # TODO: perturb is changing the test data as well.
-#     #       If the test data changes from iteration to iteration
-#     #       the models can not be compared as they are tested
-#     #       on different test sets. So perturb must be False!
-#     a, b = sequence_length // 2, (sequence_length + 1) // 2
-#     n = round(len(x) // sequence_length * rate)
-#     samples = np.linspace(a, len(x) - sequence_length - b, n).round().astype(int)
-#     # Optionally perturb the indices a bit. This is relevant if rate > 0
-#     if perturb:
-#         samples += np.random.randint(-a, b + 1, )
-#     # else:
-#     #     samples -= s0
-#     x = np.array([x.values[i:i + sequence_length] for i in samples])
-#     y = np.array([y.values[i:i + sequence_length] for i in samples])
-#     return x, y
-
-
 def sliding_window(x, y=None, sequence_length=None, overlapping=0, padding_value=0):
     '''Creates a sliding window arrays of the given array
 

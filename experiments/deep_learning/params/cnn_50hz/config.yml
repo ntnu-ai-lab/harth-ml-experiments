@@ -1,0 +1,93 @@
+# Predict command
+COMMAND: [ python, predict.py ]
+# Train command
+TRAIN_COMMAND: [ python, train.py]
+# LOO cross validation command
+LOO_CV_COMMAND: [ python, loo_cross_validation.py ]
+FREQUENCY: 50
+
+# --- Information about data
+# Path to training dataset
+TRAIN_DATA: Path/to/harth_dataset
+# Columns used for back data
+BACK_COLUMNS: [back_x, back_y, back_z]
+# Columns used for thigh data
+THIGH_COLUMNS: [thigh_x, thigh_y, thigh_z]
+# Column with label
+LABEL_COLUMN: label
+
+# Sequence length for prediction windows
+SEQUENCE_LENGTH: 50
+# Which GPU to use
+GPU: 0
+# Between 0 and 1 how much overlap
+OVERLAP: 0
+
+BATCH_SIZE: 64
+
+SUBJECT_GROUPS:
+    GROUP1_SUBJECTS: [S006.csv,  S012.csv, S014.csv, S018.csv,
+                      S020.csv, S022.csv, S008.csv, S010.csv,
+                      S013.csv, S015.csv, S017.csv, S019.csv,
+                      S016.csv, S009.csv, S021.csv]
+    GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
+                      S027.csv, S028.csv, S029.csv]
+
+CLASSES:
+  - { label: 1,  name: 'walking',                             }
+  - { label: 2,  name: 'running',                             }
+  - { label: 3,  name: 'shuffling',                           }
+  - { label: 4,  name: 'stairs (ascending)',                  }
+  - { label: 5,  name: 'stairs (descending)',                 }
+  - { label: 6,  name: 'standing',                            }
+  - { label: 7,  name: 'sitting',                             }
+  - { label: 8,  name: 'lying',                               }
+  - { label: 13, name: 'cycling (sit)',                       }
+  - { label: 14, name: 'cycling (stand)',                     }
+  - { label: 18, name: 'transport',                           }
+  - { label: 19, name: 'commute',                             }
+
+# -- Architecture
+ALGORITHM: cnn
+# Training parameter for a GridSearch
+# ALGORITHM_ARGS:
+#   learning_rate: [0.001, 0.0001, 0.00001]
+#   # epochs: 100
+#   epochs: 80
+#   early_stopping: False
+#   num_kernels: [32,64,128]
+#   kernel_sizes: [[6,6],[12,12],[6,12],
+#                  [6,6,6,6],[12,12,12,12],[6,12,12,32],
+#                  [6,6,6,6,12,12],[12,12,12,12,24,24],[6,12,12,24,24,32],
+#                  [6,6,6,6,12,12,12,12],[12,12,12,12,24,24,24,24],
+#                  [6,6,12,12,24,24,32,32]]
+#   #num_kernels: 32
+#   #kernel_sizes: [[6,6]]
+#   pooling: [False]
+#   dropout: [0.4]
+#   batch_normalization: [False]
+#   reduce_learning_rate: [False]
+
+# Best args of GridSearch:
+ALGORITHM_ARGS:
+  learning_rate: [0.001]
+  # epochs: 100
+  epochs: 80
+  early_stopping: False
+  num_kernels: [128]
+  kernel_sizes: [[6,12,12,32]]
+  pooling: [False]
+  dropout: [0.4]
+  batch_normalization: [False]
+  reduce_learning_rate: [False]
+
+CLASS_WEIGHT: False
+
+# -- Cross Validation 
+GS_NUM_VALID: 0 # 0 for no validation set
+GS_NUM_TEST: 4
+CV_RANDOM: 124
+CV_METRIC: f1score
+# Goes through cmat folder and skips GS iterations
+# for already given parameters
+SKIP_FINISHED_ARGS: True
