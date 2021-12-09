@@ -1,5 +1,5 @@
 # HARTH Dataset and Machine Learning experiments
-Baseline Machine Learning models for the Human Activity Recognition Trondheim (HARTH) dataset
+Baseline Machine Learning models for the Human Activity Recognition Trondheim (HARTH) dataset, proposed in our paper: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853).
 
 ## HARTH Dataset
 The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/harth) contains the Human Activity Recognition Trondheim Dataset (HARTH). It consists of acceleration data of 22 subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back.
@@ -45,3 +45,24 @@ cd experiments
 # Example: ./run_training.sh -a xgb -d ../harth/
 ```
 Each model can be configured using the corresponding config.yml file: [xgb](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/xgb_50hz/), [svm](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/svm_50hz/), [rf](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/rf_50hz/), [knn](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/knn_50hz/), [cnn](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/deep_learning/params/cnn_50hz/), [multi_resolution_cnn](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/deep_learning/params/inc_cnn_50hz/), [lstm](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/deep_learning/params/lstm_50hz/)
+
+## Citation
+If you use the HARTH dataset for your research, please cite the corresponding paper:
+```bibtex
+@article{logacjovHARTHHumanActivity2021,
+  title = {{{HARTH}}: {{A Human Activity Recognition Dataset}} for {{Machine Learning}}},
+  shorttitle = {{{HARTH}}},
+  author = {Logacjov, Aleksej and Bach, Kerstin and Kongsvold, Atle and B{\aa}rdstu, Hilde Bremseth and Mork, Paul Jarle},
+  year = {2021},
+  month = jan,
+  journal = {Sensors},
+  volume = {21},
+  number = {23},
+  pages = {7853},
+  publisher = {{Multidisciplinary Digital Publishing Institute}},
+  doi = {10.3390/s21237853}, 
+  copyright = {http://creativecommons.org/licenses/by/3.0/},
+  langid = {english},
+  keywords = {accelerometer,benchmark,deep learning,human activity recognition,machine learning,physical activity behavior,public dataset}
+}
+```
