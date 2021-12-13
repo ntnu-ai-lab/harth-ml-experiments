@@ -54,7 +54,7 @@ If you use the HARTH dataset for your research, please cite the corresponding pa
   shorttitle = {{{HARTH}}},
   author = {Logacjov, Aleksej and Bach, Kerstin and Kongsvold, Atle and B{\aa}rdstu, Hilde Bremseth and Mork, Paul Jarle},
   year = {2021},
-  month = jan,
+  month = nov,
   journal = {Sensors},
   volume = {21},
   number = {23},
