@@ -47,7 +47,7 @@ cd experiments
 Each model can be configured using the corresponding config.yml file: [xgb](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/xgb_50hz/), [svm](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/svm_50hz/), [rf](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/rf_50hz/), [knn](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/knn_50hz/), [cnn](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/deep_learning/params/cnn_50hz/), [multi_resolution_cnn](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/deep_learning/params/inc_cnn_50hz/), [lstm](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/deep_learning/params/lstm_50hz/)
 
 ## Citation
-If you use the HARTH dataset for your research, please cite the corresponding paper:
+If you use the HARTH dataset for your research, please cite the following papers:
 ```bibtex
 @article{logacjovHARTHHumanActivity2021,
   title = {{{HARTH}}: {{A Human Activity Recognition Dataset}} for {{Machine Learning}}},
@@ -60,9 +60,18 @@ If you use the HARTH dataset for your research, please cite the corresponding pa
   number = {23},
   pages = {7853},
   publisher = {{Multidisciplinary Digital Publishing Institute}},
-  doi = {10.3390/s21237853}, 
-  copyright = {http://creativecommons.org/licenses/by/3.0/},
-  langid = {english},
-  keywords = {accelerometer,benchmark,deep learning,human activity recognition,machine learning,physical activity behavior,public dataset}
+  doi = {10.3390/s21237853}
+}
+```
+```bibtex
+@article{bachMachineLearningClassifier2021,
+  title = {A {{Machine Learning Classifier}} for {{Detection}} of {{Physical Activity Types}} and {{Postures During Free-Living}}},
+  author = {Bach, Kerstin and Kongsvold, Atle and B{\aa}rdstu, Hilde and Bardal, Ellen Marie and Kj{\ae}rnli, H{\aa}kon S. and Herland, Sverre and Logacjov, Aleksej and Mork, Paul Jarle},
+  year = {2021},
+  month = dec,
+  journal = {Journal for the Measurement of Physical Behaviour},
+  pages = {1--8},
+  publisher = {{Human Kinetics}},
+  doi = {10.1123/jmpb.2021-0015},
 }
 ```
