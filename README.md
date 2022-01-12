@@ -1,5 +1,5 @@
 # HARTH Dataset and Machine Learning experiments
-Baseline Machine Learning models for the Human Activity Recognition Trondheim (HARTH) dataset, proposed in our paper: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853).
+Baseline Machine Learning models for the Human Activity Recognition Trondheim (HARTH) dataset, proposed and used in our papers: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853) and [A Machine Learning Classifier for Detection of Physical Activity Types and Postures During Free-Living](https://doi.org/10.1123/jmpb.2021-0015).
 
 ## HARTH Dataset
 The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/harth) contains the Human Activity Recognition Trondheim Dataset (HARTH). It consists of acceleration data of 22 subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back.
