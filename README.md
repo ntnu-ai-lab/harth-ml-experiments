@@ -70,3 +70,6 @@ If you use the HARTH dataset for your research, please cite the following papers
   doi = {10.1123/jmpb.2021-0015},
 }
 ```
+
+## Note
+Our dataset is subject to changes in future releases. Therefore, consider version [v1.0](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/v1.0) for reproducibility purposes. It contains the dataset and experiments used in our article, [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853)
