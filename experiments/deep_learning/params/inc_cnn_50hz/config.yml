@@ -45,8 +45,6 @@ CLASSES:
   - { label: 8,  name: 'lying',                               }
   - { label: 13, name: 'cycling (sit)',                       }
   - { label: 14, name: 'cycling (stand)',                     }
-  - { label: 18, name: 'transport',                           }
-  - { label: 19, name: 'commute',                             }
 
 # -- Architecture
 ALGORITHM: inception_cnn

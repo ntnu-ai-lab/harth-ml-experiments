@@ -9,9 +9,6 @@ The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main
 - 2 three-axial [Axivity AX3](https://axivity.com/product/ax3) accelerometers
 - Attached to: thigh and lower back
 
-[comment]: <> (#### Recordings)
-[comment]: <> (- TODO)
-
 #### Activity Annotations
 
 | Label| Activity                  |  Notes 				    |
@@ -26,8 +23,6 @@ The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main
 | 8    | lying                     | 			                    |
 | 13   | cycling (sit)             | 			                    |
 | 14   | cycling (stand)           | 			                    |
-| 18   | transport (sit)  	   |e.g., in a car 			    |
-| 19   | transport (stand)	   |e.g., in a bus or train 		    |
 
 ## Machine Learning Experiments
 The folder [experiments](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments) contains all our experiments. It is possible to train a K-Nearest Neighbors, a Support Vector Machine, a Random Forest, an Extreme Gradient Boost, a Convolutional Neural Network, a Bidirectional Long Short-term Memory, and a CNN with multi-resolution blocks.
