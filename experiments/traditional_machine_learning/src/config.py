@@ -1,4 +1,5 @@
 import yaml
+import os
 
 
 class Config:
@@ -9,16 +10,17 @@ class Config:
             cfg = yaml.load(f, Loader=yaml.Loader)
 
         self.CLASSES = cfg['CLASSES']
-        self.SENSORS = cfg['SENSORS']
+        self.SENSOR_COLUMNS = cfg['SENSOR_COLUMNS']
         self.LABEL_COLUMN = cfg['LABEL_COLUMN']
         self.SAMPLE_RATE = cfg['FREQUENCY']
         self.TRAIN_DATA = cfg['TRAIN_DATA']
         self.SEQUENCE_LENGTH = cfg['SEQUENCE_LENGTH']
-        self.OVERLAP = cfg['OVERLAP']
+        self.FRAME_SHIFT = cfg['FRAME_SHIFT']
         self.FEATURES = cfg['FEATURES']
         self.DEBUG = cfg['DEBUG']
         self.SUBJECT_GROUPS = cfg['SUBJECT_GROUPS']
         self.SCALE_DATA = cfg['SCALE_DATA']
+        self.CONFIG_PATH = os.path.dirname(os.path.realpath(path))  # Path of config file
 
         # Model
         self.ALGORITHM = cfg['ALGORITHM']
@@ -28,6 +30,7 @@ class Config:
         self.CV_RANDOM = cfg.get('CV_RANDOM', 0)
         self.CV_METRIC = cfg['CV_METRIC']
         self.GS_NUM_TEST = cfg['GS_NUM_TEST']
+        self.FOLDS = cfg['FOLDS']
         self.SKIP_FINISHED_ARGS = cfg['SKIP_FINISHED_ARGS']
         self.TRAIN_ON_FULL_DATASET = cfg['TRAIN_ON_FULL_DATASET']
 
@@ -36,22 +39,11 @@ class Config:
         self.PREDICTION_MODEL = cfg['PREDICTION_MODEL']
 
     @property
-    def sensors(self):
-        """
-        Sorted list (sensor, columns, args) tuples.
-        """
-        return sorted(
-            (sensor,
-             self.sensor_columns(sensor),
-             self.sensor_args(sensor))
-            for sensor in self.SENSORS
-        )
-
-    def sensor_args(self, sensor):
+    def sensor_args(self):
         """
         Allow base args to be overrriden by sensor-specific args.
         """
-        return {**self.ALGORITHM_ARGS, **self.SENSORS[sensor].get('args', {})}
+        return {**self.ALGORITHM_ARGS}
 
     def sensor_columns(self, sensor):
         """
@@ -113,4 +105,11 @@ class Config:
     @property
     def subject_groups(self):
         '''If subjects to group in different subgroups'''
+        if self.SUBJECT_GROUPS is None:
+            return None
         return [x for x in self.SUBJECT_GROUPS.values()]
+
+    @property
+    def label_index(self):
+        '''Index of each label defined in CLASSES'''
+        return {c['label']: i for i, c in enumerate(self.CLASSES)}

@@ -1,4 +1,5 @@
 import os
+import glob
 import cmat
 import pickle
 import math
@@ -7,78 +8,7 @@ from collections import Counter
 import numpy as np
 import pandas as pd
 import sklearn.model_selection
-
-
-def sliding_window(x, y=None, sequence_length=None, overlapping=0, padding_value=0):
-    '''Creates a sliding window arrays of the given array
-
-    If the input array is not divisible by the sequence_length,
-    the first samples are removed to fit.
-
-    Parameters
-    ----------
-    x : np.array
-    y : np.array
-    sequence_length : int
-    overlapping : int
-        Between 0 and 1, how strong is the overlap
-    padding_value : int or NaN, optional
-        To ensure same window size, padding is required
-        (default is 0)
-
-    Returns
-    -------
-    : np.array, np.array
-
-    '''
-    full_array = x.values
-    new_array = None
-    # Input array:
-    for axis in range(full_array.shape[-1]):
-        array = full_array[:,axis]
-        array_ext = np.full(sequence_length-1, padding_value)
-        array_ext = np.concatenate((array_ext, array))
-        strided = np.lib.stride_tricks.as_strided
-        windows = strided(array_ext,
-                          shape=(array.shape[0], sequence_length),
-                          strides=array_ext.strides*2)
-        slider = math.floor(sequence_length*(1-overlapping))
-        windows = windows[0::slider]
-        windows = windows.reshape(list(windows.shape) + [1])
-        if new_array is None:
-            new_array = windows
-        else:
-            new_array = np.append(new_array, windows, axis=2)
-    if y is not None:
-        # Label array (padding value is -1):
-        full_labels = y.values
-        label_ext = np.full(sequence_length-1, -1)
-        label_ext = np.concatenate((label_ext, full_labels))
-        label_windows = strided(label_ext,
-                                shape=(full_labels.shape[0],
-                                       sequence_length),
-                                strides=label_ext.strides*2)
-        label_windows = label_windows[0::slider]
-        # The padded window is removed if necessary
-        if len(array)%sequence_length != 0:
-            new_array = new_array[1:]
-            label_windows = label_windows[1:]
-        major_labels = []
-        # Majority voting for each window (ignore -1)
-        for label_window in label_windows:
-            lw = list(label_window)
-            major_label = Counter(list(lw)).most_common()[0][0]
-            major_labels.append(major_label)
-        return new_array, np.array(major_labels)
-    return new_array
-
-
-def pick_majority_class(y):
-    """
-    Get the majority value along second axis.
-    """
-    # This is somehow 10x faster than pd.DataFrame.mode
-    return pd.Series([collections.Counter(seq).most_common(1)[0][0] for seq in y])
+import src.featurizer
 
 
 def replace_classes(y, replace_dict):
@@ -175,97 +105,6 @@ def read_chunked_data(file, batch_size, sequence_length):
         yield chunk
 
 
-def find_best_args(Model, data, config, sensor_args,
-                   intermediate_save_path=None, scale=False,
-                   existing_arguments=[], loo=False):
-    '''Loop over parameters in grid manually and use CV
-
-    Returns
-    -------
-    float: average(across folds) f1-score of best model
-    dict: best hyperparameters
-    scale: bool
-        Whether to normalize the data before training
-    loo: bool
-        Whether to use loo or grid search+cross validation
-
-    '''
-    grid_cms = []
-    grid_args = []
-    for i, args in enumerate(grid_search(sensor_args)):
-        print(f'Evaluating arguments: {args}', flush=True)
-        if config.SKIP_FINISHED_ARGS and args in existing_arguments:
-                print(f'Skipping existing arguments: {args}',
-                      flush=True)
-                continue
-        cv_cms = []
-        # Loop over CV folds
-        # for j, train, valid in cv_split(data, config.CV_FOLDS, config.CV_RANDOM):
-        s_groups = config.subject_groups
-        num_to_test = config.GS_NUM_TEST
-        randomize = config.CV_RANDOM
-        if loo:
-            data_split = cv_split(data,0,randomize=randomize)
-            print('Do LOSO')
-        else:
-            data_split = get_multiset_cv_split(data,
-                                               s_groups,
-                                               num_to_test,
-                                               randomize=randomize)
-            print('Do Grid Search with CV')
-
-        for j, train, valid in data_split:
-            print(f'Fold {j}: valid={valid}')
-            # Separate train/valid data
-            train_x = pd.concat([data[s][0] for s in train],
-                                axis=0, ignore_index=True)
-            train_y = pd.concat([data[s][1] for s in train],
-                                axis=0, ignore_index=True)
-            valid_x = pd.concat([data[s][0] for s in valid],
-                                axis=0, ignore_index=True)
-            valid_y = pd.concat([data[s][1] for s in valid],
-                                axis=0, ignore_index=True)
-            # Create and train classifier
-            model = Model.create(train_x, train_y, scale=scale, **args)
-            # Evaluate it
-            valid_y_hat = model.predict(valid_x)[0]
-            # Collect statistics and store result for given metric
-            cm = cmat.create(valid_y, valid_y_hat,
-                             config.class_labels,
-                             config.class_names)
-            cv_cms.append(cm)
-        if intermediate_save_path is not None:
-            # Save cmat object and args in pickle file:
-            save_intermediate_cmat(intermediate_save_path,
-                                   'args_'+str(i).zfill(6)+'.pkl',
-                                   args, cv_cms)
-        # Store args used so we can find the best
-        print(pd.concat([r.report.rename(f'fold_{i}') for i, r in enumerate(cv_cms)], axis=1))
-        grid_args.append(args)
-        grid_cms.append(cv_cms)
-        print()
-    # Find best average score and corresponding arguments.
-    grid_scores = pd.concat([
-        pd.concat([cm.report.rename(f'fold_{i}') for i, cm in enumerate(cms)], axis=1).loc[[config.CV_METRIC]]
-        for cms in grid_cms
-    ], ignore_index=True)
-    averages = grid_scores.mean(axis=1)
-    best_idx = averages.idxmax()
-    best_args = grid_args[best_idx]
-    # Save best cmat object and args in pickle file:
-    if intermediate_save_path is not None:
-        # Save cmat object and args in pickle file: 
-        save_intermediate_cmat(intermediate_save_path,
-                               'best_args.pkl',
-                               best_args, grid_cms[best_idx])
-    print(f'Best avg {config.CV_METRIC}: idx={best_idx} score={averages[best_idx]: .3f} args={best_args}')
-    print(f'{config.CV_METRIC} for all grid iterations and folds:')
-    print(grid_scores)
-    print('CMATS saved at: ', intermediate_save_path)
-
-    return averages[best_idx], best_args
-
-
 def save_intermediate_cmat(path, filename, args, cmats):
     # Save cmat object and args in pickle file:
     args_cmats = [args, cmats]
@@ -274,6 +113,125 @@ def save_intermediate_cmat(path, filename, args, cmats):
     filehandler = open(path+filename, 'wb')
     pickle.dump(args_cmats, filehandler)
     filehandler.close()
+
+
+def windowed_labels(
+    labels,
+    num_labels,
+    frame_length,
+    frame_step=None,
+    pad_end=False,
+    kind='density',
+):
+    """Segmenting a label array
+
+    With kind=None we are able to split the given labels
+    array into batches.
+
+    Parameters
+    ----------
+    labels : np.array
+        Array of
+
+    Returns
+    -------
+    : np.array
+    """
+    # Labels should be a single vector (int-likes) or kind has to be None
+    labels = np.asarray(labels)
+    if kind is not None and not labels.ndim == 1:
+        raise ValueError('Labels must be a vector')
+    if not (labels >= 0).all():
+        raise ValueError('All labels must be >= 0')
+    # Kind determines how labels in each window should be processed
+    if not kind in {'counts', 'density', 'onehot', 'argmax', None}:
+        raise ValueError('`kind` must be in {counts, density, onehot, argmax, None}')
+    # Let frame_step default to one full frame_length
+    frame_step = frame_length if frame_step is None else frame_step
+    # Process labels with a sliding window.
+    output = []
+    for i in range(0, len(labels), frame_step):
+        chunk = labels[i:i+frame_length]
+        # Ignore incomplete end chunk unless padding is enabled
+        if len(chunk) < frame_length and not pad_end:
+            continue
+        # Just append the chunk if kind is None
+        if kind == None:
+            output.append(chunk)
+            continue
+        # Count the occurences of each label
+        counts = np.bincount(chunk, minlength=max(labels))
+        # Then process based on kind
+        if kind == 'counts':
+            output.append(counts)
+        elif kind == 'density':
+            output.append(counts / len(chunk))
+        elif kind == 'onehot':
+            one_hot = np.zeros(num_labels)
+            one_hot[np.argmax(counts)] = 1
+            output.append(one_hot)
+        elif kind == 'argmax':
+            output.append(np.argmax(counts))
+    return np.array(output)
+
+
+def windowed_signals(
+    signals,
+    frame_length,
+    frame_step=None,
+    pad_end=False
+):
+    """Generates signal segments of size frame_length"""
+    # Let frame_step default to one full frame_length
+    frame_step = frame_length if frame_step is None else frame_step
+    # Process signals with a sliding window
+    output = []
+    for i in range(0, len(signals), frame_step):
+        chunk = signals[i:i+frame_length]
+        # Ignore incomplete end chunk unless padding is enabled
+        if len(chunk) < frame_length and not pad_end:
+            continue
+        output.append(chunk)
+    return np.array(output)
+
+
+def unfold_windows(arr, window_size, window_shift,
+                   overlap_kind='mean'):
+    '''
+
+    Parameters
+    ----------
+    arr: np.array
+        Either 2 or 3 dimensional
+    window_size: int
+    window_shift: int
+    overlap_kind: str, optional
+        What to do with possible overlapping areas. (default is 'sum')
+        'sum' adds the values in the overlapping areas
+        'mean' computes the mean of the overlapping areas
+
+    Returns
+    -------
+    : np.arr
+        2-dimensional array
+
+    '''
+    nseg = arr.shape[0]
+    last_dim = arr.shape[-1]
+    new_dim = (window_shift * nseg + window_size - window_shift, last_dim)
+    buffer = np.zeros(new_dim)
+    if overlap_kind == 'sum':
+        for i in range(nseg):
+            buffer[i*window_shift:i*window_shift+window_size] += arr[i]
+        return buffer
+    elif overlap_kind == 'mean':
+        weights = np.zeros((new_dim[0],1))
+        for i in range(nseg):
+            buffer[i*window_shift:i*window_shift+window_size] += arr[i]
+            weights[i*window_shift:i*window_shift+window_size] += 1.0
+        return buffer/weights
+    else:
+        raise NotImplementedError(f'overlap_kind {overlap_kind}')
 
 
 def get_existing_features(path, label_column, fold_nr):
@@ -294,3 +252,75 @@ def get_existing_features(path, label_column, fold_nr):
             x = df[feature_columns]
             data[f] = (x,y)
         return data
+
+
+def load_dataset(dataset_path, config):
+    '''Loads the data and creates the features according to the config
+
+    Parameters
+    ----------
+    dataset_path: str
+    config: src.config.Config
+
+    Returns
+    -------
+    data: dict of (x,y) tuple
+        x are the signal features
+        y are the corresponding labels
+    ground_truths: dict of np.array
+        Due to feature creation, majority voting is applied, which reduces
+        the number of labels in the training data. To allow proper testing,
+        ground_truths contains the original labels for each sample without
+        aggregation.
+
+    '''
+    # Read train data from csv files in configured directory
+    print(f'Reading train data from {dataset_path}')
+    subjects = {}
+    for path in glob.glob(os.path.join(dataset_path, '*.csv')):
+        subjects[os.path.basename(path)] = pd.read_csv(path)
+
+    columns = config.SENSOR_COLUMNS
+    # Grab data corresponding to column and compute features
+    ground_truths = {}
+    data = {}
+    for subject, subject_data in subjects.items():
+        print(f'Preprocessing: {subject}')
+        x = subject_data[columns]
+        y = subject_data[config.LABEL_COLUMN]
+        # Replace classes with majority
+        y = replace_classes(y, config.replace_classes)
+        x = windowed_signals(
+            x,
+            config.SEQUENCE_LENGTH,
+            config.FRAME_SHIFT
+        )
+        # Split original labels into subsets according to the frame_length
+        # and frame_shift. This is later used for testing
+        gt = windowed_labels(
+            labels=y,
+            num_labels=len(config.CLASSES),
+            frame_length=config.SEQUENCE_LENGTH,
+            frame_step=config.FRAME_SHIFT,
+            pad_end=False,
+            kind=None,
+        ).reshape(-1)
+        # Windowing and majority voting for training
+        y = windowed_labels(
+            labels=y,
+            num_labels=len(config.CLASSES),
+            frame_length=config.SEQUENCE_LENGTH,
+            frame_step=config.FRAME_SHIFT,
+            pad_end=False,
+            kind='argmax',
+        )
+        # Generate features
+        x = src.featurizer.Featurizer.get(config.FEATURES,
+                                          x, columns,
+                                          sample_rate=config.SAMPLE_RATE)
+        # Tranform np array to series
+        y = pd.Series(y)
+        # Add to set of preprocessed data
+        data[subject] = (x, y)
+        ground_truths[subject] = gt
+    return data, ground_truths

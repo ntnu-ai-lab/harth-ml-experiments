@@ -7,7 +7,7 @@ LOO_CV_COMMAND: [python, loo_cross_validate.py]
 FREQUENCY: 50
 # Debug option
 DEBUG: False
-# Classes used in model
+# HARTH Classes used in model
 CLASSES:
   - { label: 1,  name: 'walking',                             }
   - { label: 2,  name: 'running',                             }
@@ -26,22 +26,13 @@ CLASSES:
 # Path to training dataset 
 TRAIN_DATA: Path/to/harth_dataset
 
-# Defining the subjects of each recording session
-SUBJECT_GROUPS:
-    GROUP1_SUBJECTS: [S006.csv, S012.csv, S014.csv, S018.csv,
-                      S020.csv, S022.csv, S008.csv, S010.csv,
-                      S013.csv, S015.csv, S017.csv, S019.csv,
-                      S016.csv, S009.csv, S021.csv]
-    GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
-                      S027.csv, S028.csv, S029.csv]
-
-SENSORS:
-  full:
-    columns: [back_x, back_y, back_z, thigh_x, thigh_y, thigh_z]
+SENSOR_COLUMNS: [back_x, back_y, back_z, thigh_x, thigh_y, thigh_z]
 LABEL_COLUMN: label
 # Sequence length for prediction windows
-SEQUENCE_LENGTH: 50
-OVERLAP: 0.0
+SEQUENCE_LENGTH: 250
+  #OVERLAP: 0
+# how many samples to shift the window (overlap)
+FRAME_SHIFT: 250
 # Features used
 
 FEATURES:
@@ -71,18 +62,18 @@ FEATURES:
 # Which classifier to use 
 ALGORITHM: xgboost
 # Arguments for classifier to perform a GridSearch
-# ALGORITHM_ARGS:
-#   eta: [0.1,0.3,0.5]
-#   max_depth: [3,5,10,20,25]
-#   n_estimators: [20,50,100,256,512,1024]
-#   reg_lambda: 1
-#   reg_alpha: 0
-#   gamma: 0
-#   nthread: 20
-#   objective: multi:softprob
-#   eval_metric: merror
+ALGORITHM_ARGS:
+  eta: [0.1,0.3,0.5]
+  max_depth: [3,5,10,20,25]
+  n_estimators: [20,50,100,256,512,1024]
+  reg_lambda: 1
+  reg_alpha: 0
+  gamma: 0
+  nthread: 20
+  objective: multi:softprob
+  eval_metric: merror
 
-# Best args
+# Best args for harth
 ALGORITHM_ARGS:
   eta: [0.1]
   max_depth: [3]
@@ -90,7 +81,19 @@ ALGORITHM_ARGS:
   reg_lambda: 1
   reg_alpha: 0
   gamma: 0
-  nthread: 20
+  nthread: 30
+  objective: multi:softprob
+  eval_metric: merror
+
+# Best args for harth 5sec
+ALGORITHM_ARGS:
+  eta: [0.3]
+  max_depth: [5]
+  n_estimators: [1024]
+  reg_lambda: 1
+  reg_alpha: 0
+  gamma: 0
+  nthread: 30
   objective: multi:softprob
   eval_metric: merror
 
@@ -101,15 +104,27 @@ SCALE_DATA: null
 
 
 # -- Cross Validation 
+# Defining the subjects of each recording session for a CV
+# If null: standard k-fold CV is performed
+SUBJECT_GROUPS: null
+  #     GROUP1_SUBJECTS: [S006.csv, S012.csv, S014.csv, S018.csv,
+  #                       S020.csv, S022.csv, S008.csv, S010.csv,
+  #                       S013.csv, S015.csv, S017.csv, S019.csv,
+  #                       S016.csv, S009.csv, S021.csv]
+  #     GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
+  #                       S027.csv, S028.csv, S029.csv]
 GS_NUM_TEST: 4 # How many subjects to use for testing
+# If SUBJECT_GROUPS is null, folds have to be defined for k-fold CV
+# FOLDS: 0 is a leave-one-out cross validation
+FOLDS: 3
 CV_RANDOM: 124 # Seed for xvalidation splits
 CV_METRIC: f1score
 
-SKIP_FINISHED_ARGS: True
+SKIP_FINISHED_ARGS: False
 # Whether to train on the full harth dataset after LOSO
-TRAIN_ON_FULL_DATASET: True
+TRAIN_ON_FULL_DATASET: False
 
 # --- Inference params
 INFERENCE_BATCH_SIZE: 1024
-# PREDICTION_MODEL: path/to/trained_model.pkl
+  # PREDICTION_MODEL: path/to/trained_model.pkl
 PREDICTION_MODEL: null

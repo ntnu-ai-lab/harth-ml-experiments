@@ -70,4 +70,4 @@ fi
 echo "Start training "$model...
 config_path=$(realpath $config_path)
 dataset_path=$(realpath $dataset_path)
-python $approach_path/train.py -p $config_path -d $dataset_path
+python $approach_path/loo_cross_validation.py -p $config_path -d $dataset_path

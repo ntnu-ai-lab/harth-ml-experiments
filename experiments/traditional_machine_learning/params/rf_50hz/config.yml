@@ -26,24 +26,14 @@ CLASSES:
 # Path to training dataset 
 TRAIN_DATA: Path/to/harth_dataset
 
-# Defining the subjects of each recording session
-SUBJECT_GROUPS:
-    GROUP1_SUBJECTS: [S006.csv, S012.csv, S014.csv, S018.csv,
-                      S020.csv, S022.csv, S008.csv, S010.csv,
-                      S013.csv, S015.csv, S017.csv, S019.csv,
-                      S016.csv, S009.csv, S021.csv]
-    GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
-                      S027.csv, S028.csv, S029.csv]
-
-SENSORS:
-  full:
-    columns: [back_x, back_y, back_z, thigh_x, thigh_y, thigh_z]
+SENSOR_COLUMNS: [back_x, back_y, back_z, thigh_x, thigh_y, thigh_z]
 LABEL_COLUMN: label
 # Sequence length for prediction windows
-SEQUENCE_LENGTH: 50
-OVERLAP: 0.0
-# Features used
+SEQUENCE_LENGTH: 250
+# how many samples to shift the window (overlap)
+FRAME_SHIFT: 250
 
+# Features used
 FEATURES:
   # Time domain
   - mean_gravity
@@ -71,25 +61,25 @@ FEATURES:
 # -- Model 
 # Whether to use normalization before training
 #SCALE_DATA: standardize
-SCALE_DATA: minmax
+SCALE_DATA: null
 # Which classifier to use 
 ALGORITHM: rf
 # Arguments for classifier (GS+CV)
-# ALGORITHM_ARGS:
-#   n_estimators: [10,20,30,40,50,60,70,80,90,100,
-#                  110,120,130,140,150,160,170,180,190,200,
-#                  210,220,230,240,250,260,270,280,290,300]
-#   max_depth: null
-#   criterion: gini
-#   min_samples_split: [2,4,6,10]
-#   min_samples_leaf: 1
-#   max_features: sqrt
-#   max_leaf_nodes: null
-#   bootstrap: True
-#   n_jobs: 10
-#   class_weight: [null,balanced,balanced_subsample]
+ALGORITHM_ARGS:
+  n_estimators: [10,20,30,40,50,60,70,80,90,100,
+                 110,120,130,140,150,160,170,180,190,200,
+                 210,220,230,240,250,260,270,280,290,300]
+  max_depth: null
+  criterion: gini
+  min_samples_split: [2,4,6,10]
+  min_samples_leaf: 1
+  max_features: sqrt
+  max_leaf_nodes: null
+  bootstrap: True
+  n_jobs: 10
+  class_weight: [null,balanced,balanced_subsample]
 
-# Best args:
+# Best args harth:
 ALGORITHM_ARGS:
   n_estimators: [80]
   max_depth: null
@@ -102,13 +92,39 @@ ALGORITHM_ARGS:
   n_jobs: 10
   class_weight: [balanced]
 
+# Best args harth 5sec:
+ALGORITHM_ARGS:
+  n_estimators: [70]
+  max_depth: null
+  criterion: gini
+  min_samples_split: [10]
+  min_samples_leaf: 1
+  max_features: sqrt
+  max_leaf_nodes: null
+  bootstrap: True
+  n_jobs: 10
+  class_weight: [balanced]
+
+
 # -- Cross Validation 
+# Defining the subjects of each recording session
+SUBJECT_GROUPS: null
+  # SUBJECT_GROUPS:
+  #     GROUP1_SUBJECTS: [S006.csv, S012.csv, S014.csv, S018.csv,
+  #                       S020.csv, S022.csv, S008.csv, S010.csv,
+  #                       S013.csv, S015.csv, S017.csv, S019.csv,
+  #                       S016.csv, S009.csv, S021.csv]
+  #     GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
+  #                       S027.csv, S028.csv, S029.csv]
 GS_NUM_TEST: 4
+# If SUBJECT_GROUPS is null, folds have to be defined for k-fold CV
+# FOLDS: 0 is a leave-one-out cross validation
+FOLDS: 3
 CV_RANDOM: 124
 CV_METRIC: f1score
 
 
-SKIP_FINISHED_ARGS: True
+SKIP_FINISHED_ARGS: False
 TRAIN_ON_FULL_DATASET: False
 
 # --- Inference params

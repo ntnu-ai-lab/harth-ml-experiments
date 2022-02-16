@@ -26,22 +26,12 @@ CLASSES:
 # Path to training dataset 
 TRAIN_DATA: Path/to/harth_dataset
 
-# Defining the subjects of each recording session
-SUBJECT_GROUPS:
-    GROUP1_SUBJECTS: [S006.csv, S012.csv, S014.csv, S018.csv,
-                      S020.csv, S022.csv, S008.csv, S010.csv,
-                      S013.csv, S015.csv, S017.csv, S019.csv,
-                      S016.csv, S009.csv, S021.csv]
-    GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
-                      S027.csv, S028.csv, S029.csv]
 
-SENSORS:
-  full:
-    columns: [back_x, back_y, back_z, thigh_x, thigh_y, thigh_z]
+SENSOR_COLUMNS: [back_x, back_y, back_z, thigh_x, thigh_y, thigh_z]
 LABEL_COLUMN: label
 # Sequence length for prediction windows
-SEQUENCE_LENGTH: 50
-OVERLAP: 0.0
+SEQUENCE_LENGTH: 250
+FRAME_SHIFT: 250
 # Features used
 
 FEATURES:
@@ -74,16 +64,16 @@ SCALE_DATA: minmax
 # Which classifier to use 
 ALGORITHM: svm
 # Arguments for classifier for GS+CV
-# ALGORITHM_ARGS:
-#   kernel: rbf
-#   # gamma: scale
-#   class_weight: ['balanced']
-#   probability: True
-#   C: [1, 10, 100, 1000]
-#   gamma: [scale,0.0001,0.001]
-#   max_iter: -1
+ALGORITHM_ARGS:
+  kernel: rbf
+  # gamma: scale
+  class_weight: [null, 'balanced']
+  probability: True
+  C: [1, 10, 100, 1000]
+  gamma: [scale,0.0001,0.001]
+  max_iter: -1
 
-# Best arhs:
+# Best args for harth 1sec and 5sec:
 ALGORITHM_ARGS:
   kernel: rbf
   class_weight: [null]
@@ -93,11 +83,24 @@ ALGORITHM_ARGS:
   max_iter: -1
 
 # -- Cross Validation 
+# Defining the subjects of each recording session for a CV
+# If null: standard k-fold CV is performed
+SUBJECT_GROUPS: null
+  # SUBJECT_GROUPS:
+  #     GROUP1_SUBJECTS: [S006.csv, S012.csv, S014.csv, S018.csv,
+  #                       S020.csv, S022.csv, S008.csv, S010.csv,
+  #                       S013.csv, S015.csv, S017.csv, S019.csv,
+  #                       S016.csv, S009.csv, S021.csv]
+  #     GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
+  #                       S027.csv, S028.csv, S029.csv]
+  # 
 GS_NUM_TEST: 4
+# If SUBJECT_GROUPS is null, folds have to be defined for k-fold CV
+FOLDS: 3
 CV_RANDOM: 124
 CV_METRIC: f1score
 
-SKIP_FINISHED_ARGS: True
+SKIP_FINISHED_ARGS: False
 TRAIN_ON_FULL_DATASET: False
 
 # --- Inference params
