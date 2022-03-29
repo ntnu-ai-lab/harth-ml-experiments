@@ -3,10 +3,10 @@
 function usage() {
     cat <<USAGE
 
-    Usage: $0 [-a approach] [-d dataset_path]
+    Usage: $0 [-c config_path] [-d dataset_path]
 
     Options:
-	-a, --approach:      Which approach to use (xgb,rf,svm,knn,cnn,lstm,mr_cnn)
+	-c, --config_path:   Path to config file (e.g. traditional_machine_learning/params/xgb_50hz/config.yml)
         -d, --dataset_path:  Path of the HARTH dataset
 USAGE
     exit 1
@@ -22,7 +22,7 @@ TAG=
 
 while [ "$1" != "" ]; do
     case $1 in
-    -a | --approach)
+    -c | --config_path)
         shift
         model=$1
         ;;
@@ -41,33 +41,13 @@ while [ "$1" != "" ]; do
     shift
 done
 
-if [ "$model" == "xgb" ]; then
-    approach_path=traditional_machine_learning
-    config_path=$approach_path/params/xgb_50hz/
-elif [ "$model" == "svm" ]; then
-    approach_path=traditional_machine_learning
-    config_path=$approach_path/params/svm_50hz/
-elif [ "$model" == "rf" ]; then
-    approach_path=traditional_machine_learning
-    config_path=$approach_path/params/rf_50hz/
-elif [ "$model" == "knn" ]; then
-    approach_path=traditional_machine_learning
-    config_path=$approach_path/params/knn_50hz/
-elif [ "$model" == "cnn" ]; then
-    approach_path=deep_learning
-    config_path=$approach_path/params/cnn_50hz/
-elif [ "$model" == "lstm" ]; then
-    approach_path=deep_learning
-    config_path=$approach_path/params/lstm_50hz/
-elif [ "$model" == "mr_cnn" ]; then
-    approach_path=deep_learning
-    config_path=$approach_path/params/inc_cnn_50hz/
-else
-    echo "Error: Unknown model $model." 
-    echo "Allowed models: xgb, svm, rf, knn, cnn, lstm, mr_cnn"
-fi
+approach_path=$(echo $model | cut -d/ -f1)
+echo "Start leave-one-out training using model: "$model ...
+config_path=$(realpath $model)
 
-echo "Start training "$model...
-config_path=$(realpath $config_path)
-dataset_path=$(realpath $dataset_path)
-python $approach_path/loo_cross_validation.py -p $config_path -d $dataset_path
+if [ "$dataset_path" == "" ]; then
+	python $approach_path/loo_cross_validation.py -p $config_path
+else
+	dataset_path=$(realpath $dataset_path)
+	python $approach_path/loo_cross_validation.py -p $config_path -d $dataset_path
+fi;

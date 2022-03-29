@@ -1,3 +1,4 @@
+import os
 import yaml
 
 
@@ -27,6 +28,8 @@ class Config():
         self.CV_METRIC = cfg['CV_METRIC']
         self.ALGORITHM_ARGS = cfg['ALGORITHM_ARGS']
         self.SKIP_FINISHED_ARGS = cfg['SKIP_FINISHED_ARGS']
+        # Path of config file
+        self.CONFIG_PATH = os.path.dirname(os.path.realpath(path))
 
     @property
     def non_replaced_classes(self):

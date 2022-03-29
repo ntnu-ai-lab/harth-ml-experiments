@@ -9,9 +9,8 @@ import os
 import src.config
 
 
-def loso_cv(config_path, dataset_path=None):
+def loso_cv(config, dataset_path=None):
     ##### Load config #####
-    config = src.config.Config(config_path+'config.yml')
     # Load dataset path
     if dataset_path is None:
         dataset_path = config.TRAIN_DATA
@@ -45,7 +44,7 @@ def loso_cv(config_path, dataset_path=None):
     #### Check existing arguments ####
     seconds = config.SEQUENCE_LENGTH//config.SAMPLE_RATE
     if config.SKIP_FINISHED_ARGS:
-        cmat_path = config_path + 'loo_cmats_' + str(seconds) + 'sec/'
+        cmat_path = config.CONFIG_PATH + 'loo_cmats_' + str(seconds) + 'sec/'
         existing_arguments = []
         if os.path.exists(cmat_path):
             for cmat_file in os.listdir(cmat_path):
@@ -57,7 +56,7 @@ def loso_cv(config_path, dataset_path=None):
 
     #### Check existingfolds ####
     if config.SKIP_FINISHED_ARGS:
-        folds_path = config_path + 'feature_vectors/'
+        folds_path = config.CONFIG_PATH + 'feature_vectors/'
         existing_folds = []
         if os.path.exists(folds_path):
             for fold_path in os.listdir(folds_path):
@@ -141,7 +140,7 @@ def loso_cv(config_path, dataset_path=None):
             model.fit(train_dg, valid_dg, test_dg,
                       gpu=0,
                       class_weights=class_weights,
-                      log_path=config_path+'loo_training_curves_'+str(seconds)+'sec',
+                      log_path=config.CONFIG_PATH+'loo_training_curves_'+str(seconds)+'sec',
                       log_name=log_name,
                       **args)
             valid_y = test_dg.get_real_labels()
@@ -172,7 +171,7 @@ def loso_cv(config_path, dataset_path=None):
     best_idx = averages.idxmax()
     best_args = grid_args[best_idx]
     # Save best cmat object and args in pickle file:
-    src.utils.save_intermediate_cmat(config_path+'cmats/',
+    src.utils.save_intermediate_cmat(config.CONFIG_PATH+'cmats/',
                            'best_args.pkl',
                            best_args, grid_cms[best_idx])
     print(f'Best avg {config.CV_METRIC}: idx={best_idx} score={averages[best_idx]: .3f} args={best_args}')
@@ -187,6 +186,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--dataset_path', required=False, type=str,
                         help='path to dataset.', default=None)
     args = parser.parse_args()
-    config_path = args.params_path+'/'
+    config_path = args.params_path
+    config = src.config.Config(config_path)
     ds_path = args.dataset_path
-    loso_cv(config_path, ds_path)
+    loso_cv(config, ds_path)

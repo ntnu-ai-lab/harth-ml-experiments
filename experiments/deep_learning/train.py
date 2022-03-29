@@ -8,9 +8,7 @@ import argparse
 import os
 import src.config
 
-def train(config_path, dataset_path=None):
-    ##### Load config #####
-    config = src.config.Config(config_path+'config.yml')
+def train(config, dataset_path=None):
     # Load dataset path
     if dataset_path is None:
         dataset_path = config.TRAIN_DATA
@@ -43,7 +41,7 @@ def train(config_path, dataset_path=None):
     #### Check existing arguments ####
     seconds = config.SEQUENCE_LENGTH//config.SAMPLE_RATE
     if config.SKIP_FINISHED_ARGS:
-        cmat_path = config_path + 'cmats_' + str(seconds) + 'sec/'
+        cmat_path = config.CONFIG_PATH + 'cmats_' + str(seconds) + 'sec/'
         existing_arguments = []
         if os.path.exists(cmat_path):
             for cmat_file in os.listdir(cmat_path):
@@ -127,7 +125,7 @@ def train(config_path, dataset_path=None):
             model.fit(train_dg, valid_dg, test_dg,
                       gpu=0,
                       class_weights=class_weights,
-                      log_path=config_path+'training_curves_'+str(seconds)+'sec',
+                      log_path=config.CONFIG_PATH+'training_curves_'+str(seconds)+'sec',
                       log_name=log_name,
                       **args)
             valid_y = test_dg.get_real_labels()
@@ -158,7 +156,7 @@ def train(config_path, dataset_path=None):
     best_idx = averages.idxmax()
     best_args = grid_args[best_idx]
     # Save best cmat object and args in pickle file:
-    src.utils.save_intermediate_cmat(config_path+'cmats/',
+    src.utils.save_intermediate_cmat(config.CONFIG_PATH+'cmats/',
                                      'best_args.pkl',
                                      best_args,
                                      grid_cms[best_idx])
@@ -174,6 +172,8 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--dataset_path', required=False, type=str,
                         help='path to dataset.', default=None)
     args = parser.parse_args()
-    config_path = args.params_path+'/'
+    config_path = args.params_path
+    # Read config
+    config = src.config.Config(config_path)
     ds_path = args.dataset_path
-    train(config_path, ds_path)
+    train(config, ds_path)

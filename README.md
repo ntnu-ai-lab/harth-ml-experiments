@@ -36,8 +36,8 @@ pip install -r requirements.txt
 Start a model training using HARTH
 ```bash
 cd experiments
-./run_training.sh -a <model_name> -d <path/to/dataset>
-# Example: ./run_training.sh -a xgb -d ../harth/
+./run_training.sh -c <path/to/model/config.yml> -d <path/to/dataset>
+# Example: ./run_training.sh -c traditional_machine_learning/params/xgb_50hz/config.yml -d ../harth/
 ```
 Each model can be configured using the corresponding config.yml file: [xgb](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/xgb_50hz/), [svm](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/svm_50hz/), [rf](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/rf_50hz/), [knn](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/traditional_machine_learning/params/knn_50hz/), [cnn](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/deep_learning/params/cnn_50hz/), [multi_resolution_cnn](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/deep_learning/params/inc_cnn_50hz/), [lstm](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments/deep_learning/params/lstm_50hz/)
 

@@ -140,7 +140,7 @@ def train(config, dataset_path=None, **kwargs):
                                 axis=0, ignore_index=True)
             # Train classifier and save it
             model = Model.create(train_x, train_y, **best_args)
-            model_path = os.path.join(cmat_path, 'model.pkl')
+            model_path = os.path.join(config.CONFIG_PATH, 'model.pkl')
             model.save(model_path)
             print(f'Model saved to {model_path}')
 
@@ -154,6 +154,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     config_path = args.params_path
     # Read config
-    config = src.config.Config(config_path+'/config.yml')
+    config = src.config.Config(config_path)
     ds_path = args.dataset_path
     train(config, ds_path)

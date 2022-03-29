@@ -18,6 +18,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     config_path = args.params_path
     # Read config
-    config = src.config.Config(config_path+'/config.yml')
+    config = src.config.Config(config_path)
     ds_path = args.dataset_path
     loso_cv(config, ds_path)
