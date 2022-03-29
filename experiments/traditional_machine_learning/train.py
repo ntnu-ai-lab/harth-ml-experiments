@@ -14,13 +14,16 @@ import cmat
 def train(config, dataset_path=None, **kwargs):
     if dataset_path is None:
         dataset_path = config.TRAIN_DATA
-    if not os.path.exists(dataset_path):
-        raise FileNotFoundError(f'Dataset {dataset_path} does not exist')
+    if type(dataset_path)==str:
+        dataset_path = [dataset_path]
+    for ds_p in dataset_path:
+        if not os.path.exists(ds_p):
+            raise FileNotFoundError(f'Dataset {ds_p} does not exist')
 
     #### Check existing arguments ####
     seconds = config.SEQUENCE_LENGTH//50
     scale = config.SCALE_DATA
-    train_data_path = dataset_path.split('/')[-1]
+    train_data_path = '_'.join([d.split('/')[-1] for d in dataset_path])
     cmat_path = (f'{config.CONFIG_PATH}/cmats' +
                  f'_fold{config.FOLDS}' +
                  f'_scale{scale}' +

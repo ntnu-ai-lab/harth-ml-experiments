@@ -254,12 +254,12 @@ def get_existing_features(path, label_column, fold_nr):
         return data
 
 
-def load_dataset(dataset_path, config):
+def load_dataset(dataset_paths, config):
     '''Loads the data and creates the features according to the config
 
     Parameters
     ----------
-    dataset_path: str
+    dataset_paths: list of str
     config: src.config.Config
 
     Returns
@@ -274,53 +274,53 @@ def load_dataset(dataset_path, config):
         aggregation.
 
     '''
-    # Read train data from csv files in configured directory
-    print(f'Reading train data from {dataset_path}')
-    subjects = {}
-    for path in glob.glob(os.path.join(dataset_path, '*.csv')):
-        subjects[os.path.basename(path)] = pd.read_csv(path)
-
-    columns = config.SENSOR_COLUMNS
-    # Grab data corresponding to column and compute features
     ground_truths = {}
     data = {}
-    for subject, subject_data in subjects.items():
-        print(f'Preprocessing: {subject}')
-        x = subject_data[columns]
-        y = subject_data[config.LABEL_COLUMN]
-        # Replace classes with majority
-        y = replace_classes(y, config.replace_classes)
-        x = windowed_signals(
-            x,
-            config.SEQUENCE_LENGTH,
-            config.FRAME_SHIFT
-        )
-        # Split original labels into subsets according to the frame_length
-        # and frame_shift. This is later used for testing
-        gt = windowed_labels(
-            labels=y,
-            num_labels=len(config.CLASSES),
-            frame_length=config.SEQUENCE_LENGTH,
-            frame_step=config.FRAME_SHIFT,
-            pad_end=False,
-            kind=None,
-        ).reshape(-1)
-        # Windowing and majority voting for training
-        y = windowed_labels(
-            labels=y,
-            num_labels=len(config.CLASSES),
-            frame_length=config.SEQUENCE_LENGTH,
-            frame_step=config.FRAME_SHIFT,
-            pad_end=False,
-            kind='argmax',
-        )
-        # Generate features
-        x = src.featurizer.Featurizer.get(config.FEATURES,
-                                          x, columns,
-                                          sample_rate=config.SAMPLE_RATE)
-        # Tranform np array to series
-        y = pd.Series(y)
-        # Add to set of preprocessed data
-        data[subject] = (x, y)
-        ground_truths[subject] = gt
+    # Read train data from csv files in configured directory
+    for dataset_path in dataset_paths:
+        subjects = {}
+        print(f'Reading train data from {dataset_path}')
+        for path in glob.glob(os.path.join(dataset_path, '*.csv')):
+            subjects[os.path.basename(path)] = pd.read_csv(path)
+        columns = config.SENSOR_COLUMNS
+        # Grab data corresponding to column and compute features
+        for subject, subject_data in subjects.items():
+            print(f'Preprocessing: {subject}')
+            x = subject_data[columns]
+            y = subject_data[config.LABEL_COLUMN]
+            # Replace classes with majority
+            y = replace_classes(y, config.replace_classes)
+            x = windowed_signals(
+                x,
+                config.SEQUENCE_LENGTH,
+                config.FRAME_SHIFT
+            )
+            # Split original labels into subsets according to the frame_length
+            # and frame_shift. This is later used for testing
+            gt = windowed_labels(
+                labels=y,
+                num_labels=len(config.CLASSES),
+                frame_length=config.SEQUENCE_LENGTH,
+                frame_step=config.FRAME_SHIFT,
+                pad_end=False,
+                kind=None,
+            ).reshape(-1)
+            # Windowing and majority voting for training
+            y = windowed_labels(
+                labels=y,
+                num_labels=len(config.CLASSES),
+                frame_length=config.SEQUENCE_LENGTH,
+                frame_step=config.FRAME_SHIFT,
+                pad_end=False,
+                kind='argmax',
+            )
+            # Generate features
+            x = src.featurizer.Featurizer.get(config.FEATURES,
+                                              x, columns,
+                                              sample_rate=config.SAMPLE_RATE)
+            # Tranform np array to series
+            y = pd.Series(y)
+            # Add to set of preprocessed data
+            data[subject] = (x, y)
+            ground_truths[subject] = gt
     return data, ground_truths
