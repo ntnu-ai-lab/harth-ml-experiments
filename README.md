@@ -23,6 +23,8 @@ The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main
 | 8    | lying                     | 			                    |
 | 13   | cycling (sit)             | 			                    |
 | 14   | cycling (stand)           | 			                    |
+| 130  | cycling (sit, inactive)   | cycling (sit) without leg movement     |
+| 140  | cycling (stand, inactive) | cycling (stand) without leg movement   |
 
 ## Machine Learning Experiments
 The folder [experiments](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments) contains all our experiments. It is possible to train a K-Nearest Neighbors, a Support Vector Machine, a Random Forest, an Extreme Gradient Boost, a Convolutional Neural Network, a Bidirectional Long Short-term Memory, and a CNN with multi-resolution blocks.

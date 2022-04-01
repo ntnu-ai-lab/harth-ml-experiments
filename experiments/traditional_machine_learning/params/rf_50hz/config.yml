@@ -19,6 +19,8 @@ CLASSES:
   - { label: 8,  name: 'lying',                               }
   - { label: 13, name: 'cycling (sit)',                       }
   - { label: 14, name: 'cycling (stand)',                     }
+  - { label: 130, name: 'cycling (sit, inactive)',            }
+  - { label: 140, name: 'cycling (stand, inactive)',          }
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
