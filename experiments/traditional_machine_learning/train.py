@@ -150,8 +150,9 @@ def train(config, dataset_path=None, **kwargs):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Start ML training.')
-    parser.add_argument('-p', '--params_path', required=True, type=str,
-                        help='params path with config.yml file')
+    parser.add_argument('-p', '--params_path', required=False, type=str,
+                        help='params path with config.yml file',
+                        default='/param/config.yml')
     parser.add_argument('-d', '--dataset_path', required=False, type=str,
                         help='path to dataset.', default=None)
     args = parser.parse_args()
