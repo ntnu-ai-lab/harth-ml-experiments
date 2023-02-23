@@ -1,5 +1,5 @@
-# HARTH Dataset and Machine Learning experiments
-Baseline Machine Learning models for the Human Activity Recognition Trondheim (HARTH) dataset, proposed and used in our papers: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853) and [A Machine Learning Classifier for Detection of Physical Activity Types and Postures During Free-Living](https://doi.org/10.1123/jmpb.2021-0015).
+# HAR Datasets and Machine Learning experiments
+Baseline Machine Learning models for the Human Activity Recognition Trondheim (HARTH) and the Human Acceleration Recognition 70+ (HAR70+) datasets, proposed and used in our papers: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853), [A Machine Learning Classifier for Detection of Physical Activity Types and Postures During Free-Living](https://doi.org/10.1123/jmpb.2021-0015), and [Validation of an Activity Type Recognition Model Classifying Daily Physical Behavior in Older Adults: The HAR70+ Model](https://doi.org/10.3390/s23052368).
 
 ## HARTH Dataset
 The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/harth) contains the Human Activity Recognition Trondheim Dataset (HARTH). It consists of acceleration data of 22 subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back. The dataset is also uploaded to the [UC Irvine Machine Learning Repository](https://archive-beta.ics.uci.edu/dataset/779/harth).
@@ -113,4 +113,4 @@ If you use the HAR70+ dataset for your research, please cite the following paper
 ```
 
 ## Note
-Our dataset is subject to changes in future releases. Therefore, consider version [v1.0](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/v1.0) for reproducibility purposes. It contains the dataset and experiments used in our article, [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853)
+Our HARTH dataset is subject to changes in future releases. Therefore, consider version [v1.0](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/v1.0) for reproducibility purposes. It contains the dataset and experiments used in our article, [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853)
