@@ -3,13 +3,25 @@ import sklearn.ensemble
 import sklearn.svm
 import sklearn.linear_model
 import xgboost
+import imblearn
 from sklearn.pipeline import make_pipeline
+from sklearn.decomposition import PCA
+import os
+import src.samplers
+
 
 class Model:
 
   @classmethod
-  def create( cls, x, y, scale=False, **args ):
+  def create( cls, x, y, scale=False, sampler=None, dim_reduction=None, **args ):
     model = cls()
+    if 'metric' in args and \
+       cls==KNNModel and \
+       hasattr(model, args['metric']):
+        args['metric'] = getattr(model, args['metric'])
+    if dim_reduction == 'pca':
+        n_components = args['n_components_dr']
+        args.pop('n_components_dr')
     model.clf = model.build( **args )
     if scale == 'standardize':
         print('Use StandardScaler')
@@ -19,6 +31,18 @@ class Model:
         print('Use MinMaxScaler')
         scaler = sklearn.preprocessing.MinMaxScaler()
         model.clf = make_pipeline(scaler, model.clf)
+    if dim_reduction == 'pca':
+        print(f'Use PCA with n_components: {n_components}')
+        pca = PCA(n_components=n_components)
+        model.clf = make_pipeline(pca, model.clf)
+    if sampler=='SMOTE':
+        oversample = getattr(imblearn.over_sampling, sampler)()
+        print(f'Do oversampling using {sampler}')
+        x, y = oversample.fit_resample(x, y)
+    elif type(sampler)==int:
+        sample = getattr(src.samplers, 'ActivitySubsetRandomSampler')(sampler)
+        print(f'Do oversampling using {sampler}')
+        x, y = sample.fit_resample(x, y)
     model.train( x, y )
     return model 
 
@@ -72,6 +96,9 @@ class SVMModel( Model ):
   Algorithm = sklearn.svm.SVC 
 
 class KNNModel( Model ):
+    os.environ["OPENBLAS_NUM_THREADS"] = "1"
+    os.environ["NUM_THREADS"] = "1"
+    os.environ["OMP_NUM_THREADS"] = "1"
     Algorithm = sklearn.neighbors.KNeighborsClassifier 
 
 class LogisticModel:

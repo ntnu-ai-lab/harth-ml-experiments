@@ -1,5 +1,6 @@
-# HAR Datasets and Machine Learning experiments
-Baseline Machine Learning models for the Human Activity Recognition Trondheim (HARTH) and the Human Acceleration Recognition 70+ (HAR70+) datasets, proposed and used in our papers: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853), [A Machine Learning Classifier for Detection of Physical Activity Types and Postures During Free-Living](https://doi.org/10.1123/jmpb.2021-0015), and [Validation of an Activity Type Recognition Model Classifying Daily Physical Behavior in Older Adults: The HAR70+ Model](https://doi.org/10.3390/s23052368).
+# HAR/SWR Datasets and Machine Learning experiments
+Baseline Machine Learning models for Human Activity Recognition (HAR) and Sleep Wakefulness Recognition (SWR) using the Human Activity Recognition Trondheim (HARTH), the Human Activity Recognition 70+ (HAR70+), and the DualSleep datasets, proposed and used in our papers: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853), [A Machine Learning Classifier for Detection of Physical Activity Types and Postures During Free-Living](https://doi.org/10.1123/jmpb.2021-0015), [Validation of an Activity Type Recognition Model Classifying Daily Physical Behavior in Older Adults: The HAR70+ Model](https://doi.org/10.3390/s23052368), and [A Machine Learning Model for Predicting Sleep and Wakefulness Based on Accelerometry, Skin Temperature and Contextual Information](https://doi.org/10.2147/NSS.S452799).
+
 
 ## HARTH Dataset
 The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/harth) contains the Human Activity Recognition Trondheim Dataset (HARTH). It consists of acceleration data of 22 subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back. The dataset is also uploaded to the [UC Irvine Machine Learning Repository](https://archive-beta.ics.uci.edu/dataset/779/harth).
@@ -45,6 +46,25 @@ The folder [har70plus](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/
 | 6    | standing                  | 			                    |
 | 7    | sitting                   | 			                    |
 | 8    | lying                     | 			                    |
+
+## DualSleep Dataset
+The DualSleep dataset contains accelerometer recordings with sleep-stage annotations. It consists of acceleration data of 29 subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back. The dataset is available [here](https://doi.org/10.18710/UGNIFE). Download it for the sleep experiments.
+
+#### Setup
+- Acceleration signals
+- 2 three-axial [Axivity AX3](https://axivity.com/product/ax3) accelerometers
+- Attached to: thigh and lower back
+
+#### Activity Annotations
+
+| Label| Activity                  |  Notes 				    |
+|------|:--------------------------|:--------------------------------------:|
+| 81   | Wake	                   | 			                    |
+| 82   | Non-REM1 		   |			                    |
+| 83   | Non-REM2	           | 			                    |
+| 84   | Non-REM3	           | 			                    |
+| 85   | REM	                   | 			                    |
+| 86   | Movement                  | Body movements during sleep            |
 
 ## Machine Learning Experiments
 The folder [experiments](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments) contains all our experiments. It is possible to train a K-Nearest Neighbors, a Support Vector Machine, a Random Forest, an Extreme Gradient Boost, a Convolutional Neural Network, a Bidirectional Long Short-term Memory, and a CNN with multi-resolution blocks.
@@ -109,6 +129,22 @@ If you use the HAR70+ dataset for your research, please cite the following paper
   issn = {1424-8220},
   doi = {10.3390/s23052368},
   copyright = {http://creativecommons.org/licenses/by/3.0/}
+}
+```
+
+
+If you use the DualSleep dataset for your research, please cite the following papers:
+```bibtex
+@article{logacjovMachineLearningModel2024,
+  title = {A {{Machine Learning Model}} for {{Predicting Sleep}} and {{Wakefulness Based}} on {{Accelerometry}}, {{Skin Temperature}} and {{Contextual Information}}},
+  author = {Logacjov, Aleksej and Skarpsno, Eivind Schjelderup and Kongsvold, Atle and Bach, Kerstin and Mork, Paul Jarle},
+  date = {2024-06-06},
+  journaltitle = {Nature and Science of Sleep},
+  shortjournal = {NSS},
+  volume = {16},
+  pages = {699--710},
+  publisher = {Dove Press},
+  doi = {10.2147/NSS.S452799}
 }
 ```
 

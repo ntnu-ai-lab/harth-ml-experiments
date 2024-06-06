@@ -1,0 +1,168 @@
+# Predict command
+COMMAND: [ python, predict.py ]
+# Train command
+TRAIN_COMMAND: [ python, train.py ]
+LOO_CV_COMMAND: [python, loo_cross_validation.py]
+# Sample rate the model is intended for 
+FREQUENCY: 50
+# Debug option
+DEBUG: False
+
+# sleep classes used in model
+CLASSES:
+
+  - { label: 81,  name: "Wake",       }
+  - { label: 82,  name: "N1" ,        }
+  - { label: 83,  name: "N2",        replace: 82 }
+  - { label: 84,  name: "N3",        replace: 82 }
+  - { label: 85,  name: "REM",       replace: 82 }
+  - { label: 86,  name: "Movement",  replace: 82 }
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+# --- Information about data
+# Path to training dataset 
+TRAIN_DATA: /training/sleep_combined/
+
+LABEL_COLUMN: label
+
+INDEX_COLUMN: timestamp
+# Sequence length for prediction windows
+# Features are computed for each given window size and concatenated
+# (e.g., here we compute features for a 1min, 5min, 10min, 30min, 60min, window)
+SEQUENCE_LENGTH: 3000
+# Value between 0 and 1 describing where to position a larger window
+# e.g., 0 => no "future" samples only "past" samples considered
+# e.g., 1 => only "future" samples, no "past" samples considered
+# e.g., 0.5 => small window is centered, so that same amount of future and past samples are considered
+WINDOW_POSITION: 0.5
+  #OVERLAP: 0
+# how many samples to shift the window (overlap)
+FRAME_SHIFT: 3000
+# Features used
+
+
+# Sensor settings:
+SENSORS:
+  # Listing accelerometer sensors and define features to extract
+  Acceleration:
+    COLUMNS:
+      # Defining sensor names with corresponding column names
+      BackAcc:
+        - back_x
+        - back_y
+        - back_z
+      ThighAcc:
+        - thigh_x
+        - thigh_y
+        - thigh_z
+    FEATURES:
+      - mean_gravity
+      - cv_gravity
+      - std_gravity
+      - q0_gravity
+      - q25_gravity
+      - q50_gravity
+      - q75_gravity
+      - q100_gravity
+      - skew
+      - kurtosis
+      - energy
+      - axes_corr
+      - axes_mean_gravity
+      - freq_mean
+      - freq_dom
+      - freq_dom_mag
+      - freq_total_signal_power
+      - freq_std
+      - freq_cent
+  # Listing temperature sensors and define features to extract
+  Temperature:
+    COLUMNS:
+      BackTemp:
+        - back_temp
+      ThighTemp:
+        - thigh_temp
+    FEATURES: 
+      - mean
+      - cv
+      - std
+      - q0
+      - q25
+      - q50
+      - q75
+      - q100
+      - skew
+      - kurtosis
+      - energy
+      - axes_corr
+      - axes_mean
+      - freq_mean
+      - freq_dom
+      - freq_dom_mag
+      - freq_total_signal_power
+      - freq_std
+      - freq_cent
+
+# Extra timestamp-based features
+TIME_FEATURES: False
+# Circadian features to compute based on midpoint-sleep
+# Can be:  null="don't compute circadian features"
+#          <path/to/predictions>="When another model already created predictions, here the path to it"
+#          <path/to/model.pkl>="When an already trained sleep model shall be used"
+CIRCADIAN_FEATURES: traditional_machine_learning/params/sleep_experiments/sleep_combined_experiments/svm_60sec/predictions.zip
+
+# -- Model 
+# Which classifier to use 
+ALGORITHM: svm
+ALGORITHM_ARGS:
+  kernel: rbf
+  # gamma: scale
+  class_weight: [null, 'balanced']
+  probability: True
+  C: [1, 10, 100, 1000]
+  gamma: [scale,0.0001,0.001]
+  max_iter: -1
+
+# Best args
+ALGORITHM_ARGS:
+  kernel: rbf
+  # gamma: scale
+  class_weight: [null]
+  probability: True
+  C: [1]
+  gamma: [scale]
+  max_iter: -1
+
+# Whether to use scaling before training
+SCALE_DATA: standardize
+#SCALE_DATA: minmax
+#SCALE_DATA: null
+
+
+# -- Cross Validation 
+# Defining the subjects of each recording session for a CV
+# If null: standard k-fold CV is performed
+SUBJECT_GROUPS: null
+  #     GROUP1_SUBJECTS: [S006.csv, S012.csv, S014.csv, S018.csv,
+  #                       S020.csv, S022.csv, S008.csv, S010.csv,
+  #                       S013.csv, S015.csv, S017.csv, S019.csv,
+  #                       S016.csv, S009.csv, S021.csv]
+  #     GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
+  #                       S027.csv, S028.csv, S029.csv]
+GS_NUM_TEST: 4 # How many subjects to use for testing
+# If SUBJECT_GROUPS is null, folds have to be defined for k-fold CV
+# FOLDS: 0 is a leave-one-out cross validation
+FOLDS: 4
+CV_RANDOM: 124 # Seed for xvalidation splits
+CV_METRIC: f1score
+
+SKIP_FINISHED_ARGS: True
+# Whether to train on the full harth dataset after LOSO
+TRAIN_ON_FULL_DATASET: True
+
+# --- Inference params
+INFERENCE_BATCH_SIZE: 1024
+  # PREDICTION_MODEL: path/to/trained_model.pkl
+  # PREDICTION_MODEL: null
+PREDICTION_MODEL: model.pkl

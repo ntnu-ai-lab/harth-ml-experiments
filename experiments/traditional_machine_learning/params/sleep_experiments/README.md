@@ -1,0 +1,2 @@
+# Notes for DualSleep Experiments
+The circadian rhythm estimations are created based on the predictions of the models that are trained without circadian rhythm estimations. These predictions are stored as zipped parquet files and are automatically unzipped when the training starts. To ensure a fair comparison, the predictions of one subject are created by a model that is not trained on that subject but all the other subjects.
