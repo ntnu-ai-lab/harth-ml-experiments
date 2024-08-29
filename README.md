@@ -3,7 +3,7 @@ Baseline Machine Learning models for Human Activity Recognition (HAR) and Sleep 
 
 
 ## HARTH Dataset
-The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/harth) contains the Human Activity Recognition Trondheim Dataset (HARTH). It consists of acceleration data of 22 subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back. The dataset is also uploaded to the [UC Irvine Machine Learning Repository](https://archive-beta.ics.uci.edu/dataset/779/harth).
+The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/harth) contains the Human Activity Recognition Trondheim Dataset (HARTH). It consists of acceleration data of 22 subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back. The dataset is also uploaded to the [UC Irvine Machine Learning Repository](https://doi.org/10.24432/C5NC90).
 
 #### Setup
 - Acceleration signals
@@ -28,7 +28,7 @@ The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main
 | 140  | cycling (stand, inactive) | cycling (stand) without leg movement   |
 
 ## HAR70+ Dataset
-The folder [har70plus](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/har70plus) contains the Human Activity Recognition 70+ (HAR70+) dataset. It consists of acceleration data of 18 older-adult subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back. The dataset is also uploaded to the [UC Irvine Machine Learning Repository](https://archive-beta.ics.uci.edu/dataset/780/har70).
+The folder [har70plus](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/har70plus) contains the Human Activity Recognition 70+ (HAR70+) dataset. It consists of acceleration data of 18 older-adult subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back. The dataset is also uploaded to the [UC Irvine Machine Learning Repository](https://doi.org/10.24432/C5CW3D).
 
 #### Setup
 - Acceleration signals
