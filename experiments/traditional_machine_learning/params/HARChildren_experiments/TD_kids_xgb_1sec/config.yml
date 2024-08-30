@@ -1,0 +1,143 @@
+# Predict command
+COMMAND: [ python, predict.py ]
+# Train command
+TRAIN_COMMAND: [ python, train.py ]
+LOO_CV_COMMAND: [python, loo_cross_validation.py]
+# Sample rate the model is intended for 
+FREQUENCY: 50
+# Debug option
+DEBUG: False
+
+# snt classes
+CLASSES:
+  - { label: 1,  name: 'walking',   }
+  - { label: 2,  name: 'running', }
+  - { label: 3,  name: 'shuffling',  }
+  - { label: 4,  name: 'stairs(ascending)',  }
+  - { label: 5,  name: 'stairs(descending)', }
+  - { label: 6,  name: 'standing', }
+  - { label: 7,  name: 'sitting',  }
+  - { label: 8,  name: 'lying',  }
+    # - { label: 9,  name: 'transition', }
+  - { label: 10, name: 'bending',  }
+  - { label: 13, name: 'cycling(sit)',  }
+  - { label: 14, name: 'cycling(stand)',}
+  - { label: 20, name: 'jumping', }
+
+
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+# --- Information about data
+# Path to training dataset 
+TRAIN_DATA: /training/HARChildren
+# Load only TD kids data
+LIMITED_USERS: [103.csv,111.csv,115.csv,119.csv,PM03.csv,PM07.csv,PM12.csv,PM16.csv,TD04.csv,TD08.csv,TD12.csv,TD16.csv,TD24.csv,TD29.csv,TD39.csv,105.csv,112.csv,116.csv,120.csv,PM04.csv,PM08.csv,PM13.csv,TD01.csv,TD05.csv,TD09.csv,TD13.csv,TD18.csv,TD26.csv,TD30.csv,TD40.csv,101.csv,106.csv,113.csv,117.csv,PM01.csv,PM05.csv,PM09.csv,PM14.csv,TD02.csv,TD06.csv,TD10.csv,TD14.csv,TD22.csv,TD27.csv,TD31.csv,TD46.csv,102.csv,107.csv,114.csv,118.csv,PM02.csv,PM06.csv,PM11.csv,PM15.csv,TD03.csv,TD07.csv,TD11.csv,TD15.csv,TD23.csv,TD28.csv,TD32.csv,TD48.csv]
+
+LABEL_COLUMN: label
+DROP_LABELS: [9]  # List of labels to remove from data before training
+# Sequence length for prediction windows
+SEQUENCE_LENGTH: 50
+  #OVERLAP: 0
+# how many samples to shift the window (overlap)
+FRAME_SHIFT: 50
+# Features used
+
+# Sensor settings:
+SENSORS:
+  # Listing accelerometer sensors and define features to extract
+  Acceleration:
+    COLUMNS:
+      # Defining sensor names with corresponding column names
+      BackAcc:
+        - back_x
+        - back_y
+        - back_z
+      ThighAcc:
+        - thigh_x
+        - thigh_y
+        - thigh_z
+    FEATURES:
+      - mean_gravity
+      - cv_gravity
+      - std_gravity
+      - q0_gravity
+      - q25_gravity
+      - q50_gravity
+      - q75_gravity
+      - q100_gravity
+      - skew
+      - kurtosis
+      - energy
+      - axes_corr
+      - axes_mean_gravity
+      - freq_mean
+      - freq_dom
+      - freq_dom_mag
+      - freq_total_signal_power
+      - freq_std
+      - freq_cent
+
+
+# -- Model 
+# Which classifier to use 
+ALGORITHM: xgboost
+# Arguments for classifier to perform a GridSearch
+ALGORITHM_ARGS:
+  eta: [0.1,0.3,0.5]
+  max_depth: [3,5,10,20,25]
+  n_estimators: [20,50,100,256,512,1024]
+  reg_lambda: 1
+  reg_alpha: 0
+  gamma: 0
+  nthread: 15
+  objective: multi:softprob
+  eval_metric: merror
+
+# Best args
+ALGORITHM_ARGS:
+  eta: [0.3]
+  max_depth: [3]
+  n_estimators: [1024]
+  reg_lambda: 1
+  reg_alpha: 0
+  gamma: 0
+  nthread: 15
+  objective: multi:softprob
+  eval_metric: merror
+
+
+# Whether to use scaling before training
+#SCALE_DATA: standardize
+#SCALE_DATA: minmax
+SCALE_DATA: null
+
+
+# -- Cross Validation 
+# Defining the subjects of each recording session for a CV
+# If null: standard k-fold CV is performed
+SUBJECT_GROUPS: null
+  #     GROUP1_SUBJECTS: [S006.csv, S012.csv, S014.csv, S018.csv,
+  #                       S020.csv, S022.csv, S008.csv, S010.csv,
+  #                       S013.csv, S015.csv, S017.csv, S019.csv,
+  #                       S016.csv, S009.csv, S021.csv]
+  #     GROUP2_SUBJECTS: [S023.csv, S024.csv, S025.csv, S026.csv,
+  #                       S027.csv, S028.csv, S029.csv]
+GS_NUM_TEST: 3 # How many subjects to use for testing
+# If SUBJECT_GROUPS is null, folds have to be defined for k-fold CV
+# FOLDS: 0 is a leave-one-out cross validation
+FOLDS: 6
+CV_RANDOM: 124 # Seed for xvalidation splits
+CV_METRIC: f1score
+
+SKIP_FINISHED_ARGS: False
+# Whether to train on the full harth dataset after LOSO
+TRAIN_ON_FULL_DATASET: True
+
+# --- Inference params
+INFERENCE_BATCH_SIZE: 1024
+PREDICTION_MODEL: model.pkl
+  # PREDICTION_MODEL: null
