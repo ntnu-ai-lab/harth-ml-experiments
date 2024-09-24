@@ -1,5 +1,5 @@
 # HAR/SWR Datasets and Machine Learning experiments
-Baseline Machine Learning models for Human Activity Recognition (HAR) and Sleep Wakefulness Recognition (SWR) using the Human Activity Recognition Trondheim (HARTH), the Human Activity Recognition 70+ (HAR70+), the DualSleep, and the HARChildren datasets, proposed and used in our papers: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853), [A Machine Learning Classifier for Detection of Physical Activity Types and Postures During Free-Living](https://doi.org/10.1123/jmpb.2021-0015), [Validation of an Activity Type Recognition Model Classifying Daily Physical Behavior in Older Adults: The HAR70+ Model](https://doi.org/10.3390/s23052368), [A Machine Learning Model for Predicting Sleep and Wakefulness Based on Accelerometry, Skin Temperature and Contextual Information](https://doi.org/10.2147/NSS.S452799), and Validation of two novel human activity recognition models for typically developing children and children with Cerebral Palsy.
+Baseline Machine Learning models for Human Activity Recognition (HAR) and Sleep Wakefulness Recognition (SWR) using the Human Activity Recognition Trondheim (HARTH), the Human Activity Recognition 70+ (HAR70+), the DualSleep, and the HARChildren datasets, proposed and used in our papers: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853), [A Machine Learning Classifier for Detection of Physical Activity Types and Postures During Free-Living](https://doi.org/10.1123/jmpb.2021-0015), [Validation of an Activity Type Recognition Model Classifying Daily Physical Behavior in Older Adults: The HAR70+ Model](https://doi.org/10.3390/s23052368), [A Machine Learning Model for Predicting Sleep and Wakefulness Based on Accelerometry, Skin Temperature and Contextual Information](https://doi.org/10.2147/NSS.S452799), and [Validation of two novel human activity recognition models for typically developing children and children with Cerebral Palsy](https://doi.org/10.1371/journal.pone.0308853).
 
 
 ## HARTH Dataset
@@ -185,7 +185,19 @@ If you use the DualSleep dataset for your research, please cite the following pa
 
 If you use the HARChildren dataset for your research, please cite the following papers:
 ```bibtex
-Available soon
+@article{torringValidationTwoNovel2024,
+  title = {Validation of Two Novel Human Activity Recognition Models for Typically Developing Children and Children with {{Cerebral Palsy}}},
+  author = {Tørring, Marte Fossflaten and Logacjov, Aleksej and Brændvik, Siri Merete and Ustad, Astrid and Roeleveld, Karin and Bardal, Ellen Marie},
+  date = {2024-09-23},
+  journaltitle = {PLOS ONE},
+  shortjournal = {PLOS ONE},
+  volume = {19},
+  number = {9},
+  pages = {e0308853},
+  publisher = {Public Library of Science},
+  issn = {1932-6203},
+  doi = {10.1371/journal.pone.0308853}
+}
 ```
 
 ## Note
