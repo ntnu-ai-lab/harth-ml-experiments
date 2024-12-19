@@ -3,7 +3,7 @@ Baseline Machine Learning models for Human Activity Recognition (HAR) and Sleep 
 
 
 ## HARTH Dataset
-The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/harth) contains the Human Activity Recognition Trondheim Dataset (HARTH). It consists of acceleration data of 22 subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back. The dataset is also uploaded to the [UC Irvine Machine Learning Repository](https://doi.org/10.24432/C5NC90).
+The folder [harth](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/harth) contains the newest version (v2.0) of the Human Activity Recognition Trondheim Dataset (HARTH). It consists of acceleration data of 31 subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back. An older version (v1.2) of the dataset with 22 subjects is also uploaded to the [UC Irvine Machine Learning Repository](https://doi.org/10.24432/C5NC90).
 
 #### Setup
 - Acceleration signals
