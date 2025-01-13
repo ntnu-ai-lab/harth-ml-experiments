@@ -1,5 +1,5 @@
 # HAR/SWR Datasets and Machine Learning experiments
-Baseline Machine Learning models for Human Activity Recognition (HAR) and Sleep Wakefulness Recognition (SWR) using the Human Activity Recognition Trondheim (HARTH), the Human Activity Recognition 70+ (HAR70+), the DualSleep, and the HARChildren datasets, proposed and used in our papers: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853), [A Machine Learning Classifier for Detection of Physical Activity Types and Postures During Free-Living](https://doi.org/10.1123/jmpb.2021-0015), [Validation of an Activity Type Recognition Model Classifying Daily Physical Behavior in Older Adults: The HAR70+ Model](https://doi.org/10.3390/s23052368), [A Machine Learning Model for Predicting Sleep and Wakefulness Based on Accelerometry, Skin Temperature and Contextual Information](https://doi.org/10.2147/NSS.S452799), and [Validation of two novel human activity recognition models for typically developing children and children with Cerebral Palsy](https://doi.org/10.1371/journal.pone.0308853).
+Baseline Machine Learning models for Human Activity Recognition (HAR) and Sleep Wakefulness Recognition (SWR) using the Human Activity Recognition Trondheim (HARTH), the Human Activity Recognition 70+ (HAR70+), the DualSleep, the HARChildren, and the walking speed datasets, proposed and used in our papers: [HARTH: A Human Activity Recognition Dataset for Machine Learning](https://doi.org/10.3390/s21237853), [A Machine Learning Classifier for Detection of Physical Activity Types and Postures During Free-Living](https://doi.org/10.1123/jmpb.2021-0015), [Validation of an Activity Type Recognition Model Classifying Daily Physical Behavior in Older Adults: The HAR70+ Model](https://doi.org/10.3390/s23052368), [A Machine Learning Model for Predicting Sleep and Wakefulness Based on Accelerometry, Skin Temperature and Contextual Information](https://doi.org/10.2147/NSS.S452799), [Validation of two novel human activity recognition models for typically developing children and children with Cerebral Palsy](https://doi.org/10.1371/journal.pone.0308853), and The performance of a machine learning model in predicting accelerometer-derived walking speed.
 
 
 ## HARTH Dataset
@@ -93,6 +93,24 @@ The config files for the HARChildren experiments are [here](https://github.com/n
 | 13   | cycling (sit)             |				            |
 | 14   | cycling (stand)           |				            |
 | 20   | jumping                   |				            |
+
+
+## Walking Speed Dataset
+The folder [adult_walking_speed](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/adult_walking_speed) contains the walking speed dataset. It consists of acceleration data of 24 subjects, which wore two three-axial [Axivity AX3 (Axivity Ltd., Newcastle, UK)](https://axivity.com/product/ax3) accelerometers on the thigh and lower back. A measuring wheel with a speedometer and video recording were used to capture consecutive 5-min periods at three walking speeds and running, simulating free-living conditions. Additionally, a 5-min period with a gradual increase and decrease in walking speed (from slow to brisk) was included.
+
+#### Setup
+- Acceleration signals
+- 2 three-axial [Axivity AX3](https://axivity.com/product/ax3) accelerometers
+- Attached to: thigh and lower back
+
+#### Activity Annotations
+
+| Label| Activity                  |  Notes 				    |
+|------|:--------------------------|:--------------------------------------:|
+| 2    | running                   | 			                    |
+| 101  | slow-walking 		   | ≤4 km/h				    |
+| 102  | moderate-walking 	   | 4.1-5.4 km/h	    		    |
+| 103  | brisk-walking 		   | ≥5.5 km/h				    |
 
 ## Machine Learning Experiments
 The folder [experiments](https://github.com/ntnu-ai-lab/harth-ml-experiments/tree/main/experiments) contains all our experiments. It is possible to train a K-Nearest Neighbors, a Support Vector Machine, a Random Forest, an Extreme Gradient Boost, a Convolutional Neural Network, a Bidirectional Long Short-term Memory, and a CNN with multi-resolution blocks.
